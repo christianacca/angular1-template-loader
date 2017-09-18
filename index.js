@@ -1,5 +1,5 @@
 // using: regex, capture groups, and capture group variables.
-var templateUrlRegex = /templateUrl *=(.*)$/gm;
+var templateUrlRegex = /templateUrl( *: *string)? *=(.*)$/gm;
 var stringRegex = /(['"])((?:[^\\]\\\1|.)*?)\1/g;
 
 function replaceStringsWithRequires(string) {
@@ -15,7 +15,7 @@ module.exports = function(source, sourcemap) {
   // Not cacheable during unit tests;
   this.cacheable && this.cacheable();
 
-  var newSource = source.replace(templateUrlRegex, function (match, url) {
+  var newSource = source.replace(templateUrlRegex, function (match, optionalType, url) {
                  if (match.indexOf('require(') !== -1) return match;
 
                  // replace: templateUrl = './path/to/template.html'
